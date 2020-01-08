@@ -1,0 +1,27 @@
+{
+  "name": "@dgaloyan/url",
+  "version": "0.1.0",
+  "description": "Simple url helper package",
+  "main": "dist/index",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "link": "yarn link",
+    "unlink": "yarn unlink",
+    "build": "tsc -b tsconfig.json",
+    "build:watch": "tsc -b tsconfig.json --watch  ",
+    "clean": "rm -rf ./dist"
+  },
+  "devDependencies": {
+    "typescript": "^3.6.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dav697/url.git"
+  },
+  "author": "David Galoyan",
+  "license": "ISC",
+  "gitHead": "0db2274c1e731371a65d8d386e2ce09b60097d4d"
+}
