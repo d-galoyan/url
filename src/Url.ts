@@ -61,6 +61,10 @@ export class Url {
         return '?' + fromParamsToString(this.query)
     }
 
+    toString() {
+        return this.origin + this.pathname + this.queryString + this.hashString
+    }
+
 }
 
 export class UrlBuilder {
@@ -150,8 +154,8 @@ export class UrlBuilder {
         return this
     }
 
-    build(): string {
-        return this.getOrigin() + this.getPathname() + this.getQuery() + this.getHash()
+    build() {
+        return new Url(this.getOrigin() + this.getPathname() + this.getQuery() + this.getHash())
     }
 
     private getQuery(): string {
