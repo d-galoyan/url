@@ -1,0 +1,11 @@
+"use strict";
+exports.__esModule = true;
+var Url_1 = require("./Url");
+var Url_2 = require("Url");
+exports.Url = Url_2.Url;
+exports.UrlBuilder = Url_2.UrlBuilder;
+var utils_1 = require("utils");
+exports.fromParamsToString = utils_1.fromParamsToString;
+exports.fromStringToParams = utils_1.fromStringToParams;
+var test = new Url_1.UrlBuilder(new Url_1.Url('http://something.com?query=querys&hash=hashs'));
+console.log(test);

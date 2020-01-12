@@ -1,4 +1,4 @@
-import {fromParamsToString, fromStringToParams, isRelative, object} from './utils'
+import {fromParamsToString, fromStringToParams, isRelative} from './utils'
 
 type QueryHash = {
     [key: string]: string
@@ -7,7 +7,7 @@ type QueryHash = {
 export class Url {
 
     readonly query: QueryHash = {}
-    readonly hash: QueryHash  = {}
+    readonly hash: QueryHash = {}
     private readonly url: URL
 
     constructor(url = window.location.href) {
@@ -19,11 +19,11 @@ export class Url {
         this.url = new URL(url)
 
         if (this.url.href.includes('?')) {
-            this.query = fromStringToParams(this.url.search)
+            this.query = Object.freeze(fromStringToParams(this.url.search))
         }
 
         if (this.url.href.includes('#')) {
-            this.hash = fromStringToParams(this.url.hash)
+            this.hash = Object.freeze(fromStringToParams(this.url.hash))
         }
     }
 
@@ -36,10 +36,7 @@ export class Url {
     }
 
     get hashString(): string {
-
-        if (object.isEmpty(this.hash)) return ''
-
-        return '#' + fromParamsToString(this.hash)
+        return fromParamsToString(this.hash)
     }
 
     get hostname(): string {
@@ -55,10 +52,7 @@ export class Url {
     }
 
     get queryString(): string {
-
-        if (object.isEmpty(this.query)) return ''
-
-        return '?' + fromParamsToString(this.query)
+        return fromParamsToString(this.query)
     }
 
     toString() {
@@ -69,14 +63,16 @@ export class Url {
 
 export class UrlBuilder {
 
-    private url: Url
+    private readonly query: {}
+    private readonly hash: {}
     private origin: string
     private pathname: string
 
     constructor(url: Url) {
-        this.url      = url
-        this.pathname = this.url.pathname
-        this.origin   = this.url.origin
+        this.query = {...url.query}
+        this.hash = {...url.hash}
+        this.pathname = url.pathname
+        this.origin = url.origin
     }
 
     setOrigin(origin: string): this {
@@ -106,26 +102,26 @@ export class UrlBuilder {
 
     addQuery(name: string, value: string): this {
 
-        this.url.query[name] = value
+        this.query[name] = value
 
         return this
     }
 
     addHash(name: string, value: string): this {
 
-        this.url.hash[name] = value
+        this.hash[name] = value
 
         return this
     }
 
     removeQuery(name: string): this {
-        delete this.url.query[name]
+        delete this.query[name]
         return this
     }
 
     removeQueryAll(): this {
 
-        const query = this.url.query
+        const query = this.query
 
         for (let queryName in query) {
 
@@ -137,13 +133,13 @@ export class UrlBuilder {
     }
 
     removeHash(name: string): this {
-        delete this.url.hash[name]
+        delete this.hash[name]
         return this
     }
 
     removeHashAll(): this {
 
-        const hash = this.url.hash
+        const hash = this.hash
 
         for (let queryName in hash) {
 
@@ -159,11 +155,11 @@ export class UrlBuilder {
     }
 
     private getQuery(): string {
-        return this.url.queryString
+        return fromParamsToString(this.query)
     }
 
     private getHash(): string {
-        return this.url.hashString
+        return fromParamsToString(this.hash)
     }
 
     private getOrigin(): string {
