@@ -34,11 +34,13 @@ export const fromStringToParams = (stringParams: string): { [key: string]: strin
 
 export const fromParamsToString = (paramsObject: { [key: string]: string }) => {
 
+    if (object.isEmpty(paramsObject)) return ''
+
     const params = Object
         .keys(paramsObject)
         .map(name => {
             return `${name}=${encodeURIComponent(paramsObject[name])}`
         })
 
-    return params.join('&')
+    return '?' + params.join('&')
 }
